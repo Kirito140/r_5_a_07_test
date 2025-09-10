@@ -1,0 +1,12 @@
+# Exemple de configuration Spring Boot pour ce projet
+server:
+  port: 2005
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/{database}
+    username: votre_utilisateur
+    password: votre_mot_de_passe
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# Autres propriétés personnalisées ici
