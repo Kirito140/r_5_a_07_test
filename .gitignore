@@ -1,3 +1,4 @@
+LOG/*.log
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
@@ -33,3 +34,5 @@ build/
 .vscode/
 
 application.yml
+
+**.log

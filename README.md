@@ -23,9 +23,9 @@ Ce projet est une application web Spring Boot permettant de gérer des utilisate
 ```yml
 spring:
     datasource:
-    url: jdbc:mysql://localhost:3306/demo
-    username: votre_utilisateur
-    password: votre_mot_de_passe
+    url: jdbc:mysql://localhost:PORT/DATABASE
+    username: USERNAME
+    password: PASSWORD
 ```
 3. Assurez-vous que la table `user` existe :
 
