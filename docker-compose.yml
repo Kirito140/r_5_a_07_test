@@ -14,8 +14,6 @@ services:
       - "2005:2005"
     volumes:
       - ./src/main/resources/application.yml:/app/application.yml:ro
-    depends_on:
-      - db
     environment:
       url: ${DB_URL}
       username: ${DB_USERNAME}
