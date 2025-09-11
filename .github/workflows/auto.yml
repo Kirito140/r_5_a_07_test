@@ -25,9 +25,9 @@ jobs:
       - name: Run Docker containers
         run: docker compose up -d
         env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.USERNAME }}
-          DB_PASSWORD: ${{ secrets.MDP }}
+          DB_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          DB_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          DB_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
 
       - name: Verify application is running
         run: |
@@ -49,9 +49,9 @@ jobs:
     needs: tst-exe
 
     env:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.USERNAME }}
-      DB_PASSWORD: ${{ secrets.MDP }}
+      DB_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+      DB_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+      DB_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -80,9 +80,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: tst-exe
     env:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.USERNAME }}
-      DB_PASSWORD: ${{ secrets.MDP }}
+      DB_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+      DB_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+      DB_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
 
     steps:
       - name: Checkout code
