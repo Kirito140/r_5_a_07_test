@@ -34,8 +34,8 @@ jobs:
         run: docker compose up -d
         env:
           DB_URL: ${{ vars.DB_URL }}
-          DB_USERNAME: ${{ secrets.USERNAME }}
-          DB_PASSWORD: ${{ secrets.MDP }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         
       - name: Show MySQL logs
         if: failure()             # ne s'exécute que si un step précédent a échoué
@@ -81,8 +81,8 @@ jobs:
 
     env:
       DB_URL: ${{ vars.DB_URL }}
-      DB_USERNAME: ${{ secrets.USERNAME }}
-      DB_PASSWORD: ${{ secrets.MDP }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -112,8 +112,8 @@ jobs:
     needs: tst-exe
     env:
       DB_URL: ${{ vars.DB_URL }}
-      DB_USERNAME: ${{ secrets.USERNAME }}
-      DB_PASSWORD: ${{ secrets.MDP }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Checkout code
