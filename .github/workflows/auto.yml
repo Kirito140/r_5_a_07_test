@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB_URL: ${{ vars.DB_URL }}
-      DB_USERNAME: ${{ secrets.USERNAME }}
-      DB_PASSWORD: ${{ secrets.MDP }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Checkout code
