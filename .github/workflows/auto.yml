@@ -26,9 +26,13 @@ jobs:
 
       - name: Run Docker containers
         run: docker compose up -d
+        continue-on-error: true   # empêche l'arrêt brutal
         
       - name: Show MySQL logs
-        run: docker logs demo-mysql
+        if: failure()             # ne s'exécute que si un step précédent a échoué
+        run: |
+          docker logs demo-mysql;
+          exit 1
 
       - name: Verify application is running
         run: |
@@ -40,7 +44,7 @@ jobs:
             docker compose logs
             exit 1
           fi
-
+          
       - name: Stop Docker containers
         if: always()
         run: docker compose down
