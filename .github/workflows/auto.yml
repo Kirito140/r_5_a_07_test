@@ -31,7 +31,7 @@ jobs:
         run: mvn clean package
 
       - name: Run Docker containers
-        run: docker compose up -d
+        run: docker compose up
         env:
           DB_URL: ${{ vars.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -51,7 +51,7 @@ jobs:
         run: |
           echo "⏳ Attente du démarrage de l'application…"
 
-          for i in {1..30}; do
+          for i in {1..10}; do
             if curl -s http://localhost:2005/actuator/health > /dev/null; then
               echo "✅ Application démarrée !"
               exit 0
@@ -61,7 +61,7 @@ jobs:
             sleep 2
           done
           
-          echo "❌ L'application n'a pas démarré après 60 secondes."
+          echo "❌ L'application n'a pas démarré après 20 secondes."
           curl http://localhost:2005 || true
           exit 1
           
