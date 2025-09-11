@@ -47,13 +47,18 @@ jobs:
               exit 0
             fi
             echo "Attente… ($i/30)"
-            sleep 4
+            sleep 2
           done
           
-          echo "❌ L'application n'a pas démarré après 120 secondes."
+          echo "❌ L'application n'a pas démarré après 60 secondes."
           curl http://localhost:2005 || true
           exit 1
-
+          
+      - name: Show MySQL logs
+        if: failure()             # ne s'exécute que si un step précédent a échoué
+        run: |
+          docker logs demo-app;
+          exit 1
           
       - name: Stop Docker containers
         if: always()
