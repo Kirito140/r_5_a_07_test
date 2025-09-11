@@ -11,9 +11,9 @@ services:
     depends_on:
       - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/demo
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: ${MDP} # <<< utilise la syntaxe Docker Compose, pas $(mdp)
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
 
   db:
     image: kirito140/demo-mysql:latest
@@ -21,13 +21,13 @@ services:
     container_name: demo-mysql
     environment:
       MYSQL_DATABASE: demo
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: ${MDP}
-      MYSQL_ROOT_PASSWORD: ${MDP}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
 
 volumes:
-  db_data:
+   db_data:
