@@ -41,10 +41,11 @@ jobs:
         if: failure()             # ne s'exécute que si un step précédent a échoué
         run: |
           docker logs demo-mysql;
-          exit 1
-      - name: Follow Spring Boot logs
-        if: always()
-        run: docker logs demo-app --follow
+           exit 1
+           
+      # - name: Follow Spring Boot logs
+      #   if: always()
+      #   run: docker logs demo-app --follow
 
       - name: Verify application is running
         run: |
@@ -56,7 +57,7 @@ jobs:
               exit 0
             fi
             echo "Attente… ($i/30)"
-            docker ps
+            docker ps -a
             sleep 2
           done
           
