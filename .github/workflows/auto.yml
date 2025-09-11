@@ -26,6 +26,9 @@ jobs:
 
       - name: Run Docker containers
         run: docker compose up -d
+        
+      - name: Show MySQL logs
+        run: docker logs demo-mysql
 
       - name: Verify application is running
         run: |
