@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: dockerfil
+      dockerfile: dockerfile
     container_name: demo-app
     ports:
       - "2005:2005"
