@@ -26,6 +26,10 @@ jobs:
 
       - name: Run Docker containers
         run: docker compose up -d
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.USERNAME }}
+          DB_PASSWORD: ${{ secrets.MDP }}
         
       - name: Show MySQL logs
         if: failure()             # ne s'exécute que si un step précédent a échoué
