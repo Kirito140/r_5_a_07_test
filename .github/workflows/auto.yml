@@ -26,7 +26,6 @@ jobs:
 
       - name: Run Docker containers
         run: docker compose up -d
-        continue-on-error: true   # empêche l'arrêt brutal
         
       - name: Show MySQL logs
         if: failure()             # ne s'exécute que si un step précédent a échoué
@@ -37,7 +36,7 @@ jobs:
       - name: Verify application is running
         run: |
           echo "⏳ Attente du démarrage de l'application..."
-          sleep 100
+          sleep 30
           echo "🔍 Vérification sur http://localhost:2005"
           if ! curl -f http://localhost:2005; then
             echo "❌ L'application n'a pas démarré correctement. Logs :"
