@@ -8,6 +8,10 @@ on:
 jobs:
   tst-exe:
     runs-on: ubuntu-latest
+    env:
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_USERNAME: ${{ secrets.USERNAME }}
+      DB_PASSWORD: ${{ secrets.MDP }}
 
     steps:
       - name: Checkout code
@@ -24,10 +28,6 @@ jobs:
 
       - name: Run Docker containers
         run: docker compose up -d
-        env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.USERNAME }}
-          DB_PASSWORD: ${{ secrets.MDP }}
 
       - name: Verify application is running
         run: |
