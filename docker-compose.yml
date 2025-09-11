@@ -4,18 +4,16 @@ services:
   app:
     build:
       context: .
-      dockerfile: dockerfil
+      dockerfile: dockerfile   # <<< nom corrigé
     container_name: demo-app
     ports:
       - "2005:2005"
-    volumes:
-      - ./src/main/resources/application.yml:/app/application.yml:ro
     depends_on:
       - db
     environment:
-      url: ${DB_URL}
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
 
   db:
     build:
@@ -24,9 +22,9 @@ services:
     container_name: demo-mysql
     environment:
       MYSQL_DATABASE: demo
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${SPRING_DATASOURCE_USERNAME}
+      MYSQL_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
