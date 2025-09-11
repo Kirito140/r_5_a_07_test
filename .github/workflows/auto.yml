@@ -56,8 +56,9 @@ jobs:
               echo "✅ Application démarrée !"
               exit 0
             fi
-            echo "Attente… ($i/30)"
+            echo "Attente… ($i/10)"
             docker ps -a
+            docker inspect --format='{{.State.Running}}' demo-app | grep true >/dev/null || docker restart demo-app
             sleep 2
           done
           
