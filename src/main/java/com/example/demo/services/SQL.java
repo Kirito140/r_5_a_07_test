@@ -81,10 +81,7 @@ public class SQL {
         for (int i = 0; i < colCount; i++) {
             widths[i] = meta.getColumnLabel(i + 1).length();
         }
-        // Parcours pour trouver la largeur max
-        int rowCountForWidth = 0;
         while (rs.next()) {
-            rowCountForWidth++;
             for (int i = 0; i < colCount; i++) {
                 String val = rs.getString(i + 1);
                 if (val != null && val.length() > widths[i]) widths[i] = val.length();
