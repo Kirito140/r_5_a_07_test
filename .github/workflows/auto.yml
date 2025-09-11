@@ -7,7 +7,7 @@ jobs:
   tst-exe:
     runs-on: ubuntu-latest
     env:
-      DB_URL: ${{ secrets.DB_URL }}
+      DB_URL: ${{ vars.DB_URL }}
       DB_USERNAME: ${{ secrets.USERNAME }}
       DB_PASSWORD: ${{ secrets.MDP }}
 
@@ -27,7 +27,7 @@ jobs:
       - name: Run Docker containers
         run: docker compose up -d
         env:
-          DB_URL: ${{ secrets.DB_URL }}
+          DB_URL: ${{ vars.DB_URL }}
           DB_USERNAME: ${{ secrets.USERNAME }}
           DB_PASSWORD: ${{ secrets.MDP }}
         
@@ -74,7 +74,7 @@ jobs:
     needs: tst-exe
 
     env:
-      DB_URL: ${{ secrets.DB_URL }}
+      DB_URL: ${{ vars.DB_URL }}
       DB_USERNAME: ${{ secrets.USERNAME }}
       DB_PASSWORD: ${{ secrets.MDP }}
 
@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: tst-exe
     env:
-      DB_URL: ${{ secrets.DB_URL }}
+      DB_URL: ${{ vars.DB_URL }}
       DB_USERNAME: ${{ secrets.USERNAME }}
       DB_PASSWORD: ${{ secrets.MDP }}
 
