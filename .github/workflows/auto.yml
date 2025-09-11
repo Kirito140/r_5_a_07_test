@@ -30,7 +30,7 @@ jobs:
       - name: Verify application is running
         run: |
           echo "⏳ Attente du démarrage de l'application..."
-          sleep 30
+          sleep 100
           echo "🔍 Vérification sur http://localhost:2005"
           if ! curl -f http://localhost:2005; then
             echo "❌ L'application n'a pas démarré correctement. Logs :"
