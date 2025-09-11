@@ -43,9 +43,9 @@ jobs:
           docker logs demo-mysql;
            exit 1
            
-      # - name: Follow Spring Boot logs
-      #   if: always()
-      #   run: docker logs demo-app --follow
+      - name: Follow Spring Boot logs
+        if: always()
+        run: docker logs demo-app --follow
 
       - name: Verify application is running
         run: |
@@ -65,13 +65,14 @@ jobs:
           curl http://localhost:2005 || true
           exit 1
           
-      # - name: Show App logs
-      #   if: failure()             # ne s'exécute que si un step précédent a échoué
-      #   run: |
-      #     echo "=== SPRING BOOT LOGS ==="
-      #     docker logs demo-app > spring_logs.txt
-      #     cat spring_logs.txt
-      #     exit 1
+      - name: Show App logs
+        if: failure()             # ne s'exécute que si un step précédent a échoué
+        run: |
+           echo "=== SPRING BOOT LOGS ==="
+           docker logs demo-app > spring_logs.txt
+           cat spring_logs.txt
+           docker logs --tail 50 demo-app
+           exit 1
           
       - name: Stop Docker containers
         if: always()
