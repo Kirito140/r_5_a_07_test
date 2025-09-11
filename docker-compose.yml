@@ -1,10 +1,9 @@
 version: '3.8'
-
 services:
   app:
     build:
       context: .
-      dockerfile: dockerfile   # <<< nom corrigé
+      dockerfile: dockerfile
     container_name: demo-app
     ports:
       - "2005:2005"
@@ -18,13 +17,13 @@ services:
   db:
     build:
       context: .
-      dockerfile: dockerfil-mysql.dockerfile
+      dockerfile: dockerfile-mysql.dockerfile
     container_name: demo-mysql
     environment:
       MYSQL_DATABASE: demo
       MYSQL_USER: ${SPRING_DATASOURCE_USERNAME}
       MYSQL_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
