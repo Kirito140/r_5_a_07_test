@@ -1,29 +1,35 @@
 version: '3.8'
+
 services:
   app:
     build:
       context: .
       dockerfile: dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
     container_name: demo-app
     ports:
       - "2005:2005"
-    depends_on:
-      - db
+    volumes:
+      - ./src/main/resources/application.yml:/app/application.yml:ro
     environment:
-      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      url: ${DB_URL}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
 
   db:
     build:
       context: .
-      dockerfile: dockerfile-mysql.dockerfile
+      dockerfile: dockerfil-mysql.dockerfile
     container_name: demo-mysql
     environment:
       MYSQL_DATABASE: demo
-      MYSQL_USER: ${SPRING_DATASOURCE_USERNAME}
-      MYSQL_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u${DB_USERNAME} -p${DB_PASSWORD} || exit 1"]
     ports:
       - "3307:3306"
     volumes:
