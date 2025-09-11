@@ -5,6 +5,10 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
     container_name: demo-app
     ports:
       - "2005:2005"
