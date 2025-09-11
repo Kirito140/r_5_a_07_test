@@ -56,6 +56,7 @@ jobs:
               exit 0
             fi
             echo "Attente… ($i/30)"
+            docker ps
             sleep 2
           done
           
