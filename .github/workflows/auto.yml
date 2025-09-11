@@ -15,6 +15,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check env variables
+        run: |
+          echo $DB_URL
+          echo $DB_USERNAME
+          echo $DB_PASSWORD
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
