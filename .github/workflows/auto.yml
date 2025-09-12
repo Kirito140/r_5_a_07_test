@@ -31,7 +31,7 @@ jobs:
         run: mvn clean package
 
       - name: Run Docker containers
-        run: docker compose up
+        run: docker compose up -d
         env:
           DB_URL: ${{ vars.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
