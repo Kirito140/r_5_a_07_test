@@ -1,9 +1,7 @@
 name: CI/CD Pipeline
 
-on:
-  push:
-    branches:
-      - test_auto.yml
+on: push 
+
 jobs:
   # 1. Tests d’exécution (CI)
   test-app:
