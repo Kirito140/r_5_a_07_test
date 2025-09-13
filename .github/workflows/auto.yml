@@ -3,10 +3,7 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
-      - develop
-      - feature/**
-      - hotfix/**
+      - test_auto.yml
 
 jobs:
   # 1. Tests unitaires avec H2 (rapides)
