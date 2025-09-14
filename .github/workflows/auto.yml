@@ -6,9 +6,9 @@ jobs:
   tst-exe:
     runs-on: ubuntu-latest
     env:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+      SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
+      SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -21,15 +21,14 @@ jobs:
           java-version: "24"
 
       - name: Build JAR
-        run: mvn install package
+        run: mvn clean package
 
       - name: Run Docker containers
         run: docker compose up -d
         env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
+          SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Show MySQL logs
         if: failure() # ne s'exécute que si un step précédent a échoué
@@ -57,9 +56,9 @@ jobs:
     needs: tst-exe
 
     env:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+      SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
+      SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -72,7 +71,7 @@ jobs:
           java-version: "24"
 
       - name: Build JAR
-        run: mvn clean package
+        run: mvn install package
 
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build & push Docker image
@@ -103,7 +102,7 @@ jobs:
           java-version: "24"
 
       - name: Build JAR
-        run: mvn clean package
+        run: mvn install package
 
       - name: Run Docker containers
         run: docker build -t demo-mysql -f dockerfile-mysql.dockerfile .
