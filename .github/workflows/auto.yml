@@ -64,7 +64,7 @@ jobs:
           image: kirito140/test_mysql
           tags: v1, latest
           registry: docker.io
-          dockerfile: dockerfil-mysql.dockerfile
+          dockerfile: dockerfile-mysql.dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
   
