@@ -42,7 +42,7 @@ jobs:
           sleep 30
           echo "🔍 Vérification sur http://localhost:2005"
           if ! curl -f http://localhost:2005; then
-            echo "❌ L'application n'a pas démarré correctement. Logs : "
+            echo "❌ L'application n'a pas démarré correctement. Logs :"
             docker compose logs
             exit 1
           fi
