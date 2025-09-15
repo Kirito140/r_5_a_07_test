@@ -25,17 +25,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: "temurin"
-          java-version: "24"
+          java-version: "21"
 
       - name: Build JAR
-        run: mvn clean package
+        run: mvn Install
 
       - name: Run Docker containers
         run: docker compose up -d
-        env:
-          DB_URL: ${{ vars.DB_URL }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         
       - name: Show MySQL logs
         if: failure()             # ne s'exécute que si un step précédent a échoué
@@ -43,9 +39,9 @@ jobs:
           docker logs demo-mysql;
            exit 1
            
-      - name: Follow Spring Boot logs
-        if: always()
-        run: docker logs demo-app --follow
+    #   - name: Follow Spring Boot logs
+    #     if: always()
+    #     run: docker logs demo-app --follow
 
       - name: Verify application is running
         run: |

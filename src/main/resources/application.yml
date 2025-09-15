@@ -1,10 +1,10 @@
-# Exemple de configuration Spring Boot pour ce projet
+# configuration Spring Boot pour ce projet
 server:
   port: 2005
 
 spring:
   datasource:
-    url: ${DB_URL}
+    url: jcbd::mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
