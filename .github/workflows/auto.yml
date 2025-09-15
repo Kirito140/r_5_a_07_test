@@ -66,7 +66,7 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build & push DB Docker image
         with:
-          image: kirito140/test_mysql
+          image: mrcotin/test-db
           tags: v1, latest
           registry: docker.io
           dockerfile: dockerfile-mysql.dockerfile
@@ -93,7 +93,7 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build & push App Docker image
         with:
-          image: kirito140/test_myapp
+          image: mrcotin/test
           tags: v1, latest
           registry: docker.io
           dockerfile: dockerfile # ou Dockerfile selon ton repo
