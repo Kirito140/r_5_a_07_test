@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   app:
-    image: kirito140/test_myapp:latest
+    image: mrcotin/test:latest
     container_name: demo-app
     ports:
       - "2005:2005"
@@ -16,7 +16,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
 
   db:
-    image: kirito140/demo-mysql:latest
+    image: mrcotin/test-db:latest
 
     container_name: demo-mysql
     environment:
