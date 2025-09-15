@@ -17,15 +17,14 @@ services:
 
   db:
     image: mrcotin/test-db:latest
-
     container_name: demo-mysql
     environment:
       MYSQL_DATABASE: demo
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_USER: ${DB_USERNAME}&
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"   # exposition sur l'hôte seulement, pas utilisé par app
     volumes:
       - db_data:/var/lib/mysql
 
