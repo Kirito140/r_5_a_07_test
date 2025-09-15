@@ -54,7 +54,6 @@ jobs:
   build-db:
     runs-on: ubuntu-latest
     needs: tst-exe
-
     env:
       SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
       SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -76,6 +75,10 @@ jobs:
   build-demo:
     runs-on: ubuntu-latest
     needs: build-db
+    env:
+      SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+      SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
+      SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Checkout code
