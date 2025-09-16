@@ -30,7 +30,7 @@ jobs:
           DB_PORT: 3306
           DB_NAME: demo
 
-      - name: Run Docker containers (tests)
+      - name: Run Docker containers
         run: docker compose up -d
         
       - name: Show MySQL logs(DEBUG)
@@ -114,7 +114,7 @@ jobs:
           path: .
 
       - name: Print images (TEMP)
-        run: docker image
+        run: docker image ls
 
       # Taguer l'image existante
       - name: Tag the existing image
