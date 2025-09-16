@@ -23,8 +23,8 @@ jobs:
           distribution: "temurin"
           java-version: "21"
 
-    #   - name: Setup BDD
-    #     run: docker compose up -d db
+      - name: Setup BDD
+        run: docker compose up -d db
 
       - name: Build JAR
         run: mvn install
