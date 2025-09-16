@@ -1,10 +1,12 @@
 name: CI/CD Pipeline
 
 on:
-  push
+  push:
+    branches:
+      ["Tests-coco"]
 
 jobs:
-  tst-exe:
+  Build:
     runs-on: ubuntu-latest
     env:
       DB_NAME: ${{ vars.DB_NAME }}
@@ -64,18 +66,35 @@ jobs:
            cat spring_logs.txt
            docker logs --tail 50 demo-app
            exit 1
-          
+
+      - name: Print images (temp)
+        run: docker images
+
+      - name: Save app image
+        run: docker save -o app.tar demo-app:latest
+
+      - name: Upload app image
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-app
+          path: app.tar
+
+      - name: Save db image
+        run: docker save -o db.tar demo-bd:latest
+
+      - name: Upload db image
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-db
+          path: db.tar
+
       - name: Stop Docker containers
         if: always()
         run: docker compose down
 
-  build-db:
+  Push-db:
     runs-on: ubuntu-latest
-    needs: tst-exe
-    env:
-      DB_NAME: ${{ vars.DB_NAME }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    needs: Build
 
     steps:
       - name: Checkout code
@@ -91,33 +110,35 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-  build-demo:
+  Push-app:
     runs-on: ubuntu-latest
-    needs: tst-exe
-    env:
-      DB_NAME: ${{ vars.DB_NAME }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    needs: Build
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      # Récupération de l'image depuis le cache
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
         with:
-          distribution: "temurin"
-          java-version: "24"
+          name: image-app
+          path: .
 
-      - name: Build JAR
-        run: mvn clean package
+      # Taguer l'image existante
+      - name: Tag the existing image
+        run: |
+          docker tag your-prebuilt-image:latest registry.example.com/myrepo/image:tag
 
-      - uses: mr-smithers-excellent/docker-build-push@v6
-        name: Build & push App Docker image
+      # Se connecter a Docker-Hub
+      - name: Login to registry
+        uses: docker/login-action@v2
         with:
-          image: mrcotin/test
-          tags: v1, latest
           registry: docker.io
-          dockerfile: dockerfile # ou Dockerfile selon ton repo
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Push l’image taguée
+      - name: Push image
+        run: |
+          docker push registry.example.com/myrepo/image:tag
