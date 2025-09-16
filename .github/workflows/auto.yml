@@ -15,12 +15,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check env variables
-        run: |
-          echo $DB_URL
-          echo $DB_USERNAME
-          echo $DB_PASSWORD
-
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -28,7 +22,7 @@ jobs:
           java-version: "21"
 
       - name: Build JAR
-        run: mvn Install
+        run: mvn install
 
       - name: Run Docker containers (tests)
         run: docker compose up -d
@@ -95,7 +89,7 @@ jobs:
 
   build-demo:
     runs-on: ubuntu-latest
-    needs: build-db
+    needs: tst-exe
     env:
       DB_NAME: ${{ vars.DB_NAME }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
