@@ -1,18 +1,16 @@
-version: "3.8"
-
 services:
   app:
-    image: mrcotin/test:latest
+    image: mrcotin/test:v2
     container_name: demo-app
     ports:
-      - "2005:2005"
+      - "${APP_PORT:-2005}:2005"
     volumes:
       - ./src/main/resources/application.yml:/app/application.yml:ro
     depends_on:
       - db
     environment:
-      DB_HOST: db
-      DB_PORT: 3306
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-3306}
       DB_NAME: ${DB_NAME:-demo}
       DB_USERNAME: ${DB_USERNAME:-admin}
       DB_PASSWORD: ${DB_PASSWORD:-pasword}
@@ -25,13 +23,10 @@ services:
       MYSQL_USER: ${DB_USERNAME:-admin}
       MYSQL_PASSWORD: ${DB_PASSWORD:-pasword}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-pasword}
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$MYSQL_USER", "-p$MYSQL_PASSWORD"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     volumes:
       - db_data:/var/lib/mysql
+    ports:
+      [3306:3306]
 
 volumes:
    db_data:
