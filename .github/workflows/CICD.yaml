@@ -33,7 +33,7 @@ jobs:
       - name: Run Docker containers (tests)
         run: docker compose up -d
         
-      - name: Show MySQL logs
+      - name: Show MySQL logs(DEBUG)
         if: failure()             # ne s'exécute que si un step précédent a échoué
         run: |
           docker logs demo-mysql;
@@ -58,7 +58,7 @@ jobs:
           curl http://localhost:2005 || true
           exit 1
           
-      - name: Show App logs
+      - name: Show App logs(DEBUG)
         if: failure()             # ne s'exécute que si un step précédent a échoué
         run: |
            echo "=== SPRING BOOT LOGS ==="
@@ -67,26 +67,14 @@ jobs:
            docker logs --tail 50 demo-app
            exit 1
 
-      - name: Print images (temp)
-        run: docker images
-
       - name: Save app image
-        run: docker save -o app.tar demo-app:latest
+        run: docker save -o app.tar r_5_a_07_test-app:latest
 
       - name: Upload app image
         uses: actions/upload-artifact@v4
         with:
           name: image-app
           path: app.tar
-
-      - name: Save db image
-        run: docker save -o db.tar demo-bd:latest
-
-      - name: Upload db image
-        uses: actions/upload-artifact@v4
-        with:
-          name: image-db
-          path: db.tar
 
       - name: Stop Docker containers
         if: always()
@@ -128,17 +116,16 @@ jobs:
       # Taguer l'image existante
       - name: Tag the existing image
         run: |
-          docker tag your-prebuilt-image:latest registry.example.com/myrepo/image:tag
+          docker tag image-app:latest docker.io/mrcotin/test:v2
 
       # Se connecter a Docker-Hub
-      - name: Login to registry
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Push l’image taguée
       - name: Push image
         run: |
-          docker push registry.example.com/myrepo/image:tag
+          docker push mrcotin/test:v2
