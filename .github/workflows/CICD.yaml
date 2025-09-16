@@ -23,12 +23,14 @@ jobs:
           distribution: "temurin"
           java-version: "21"
 
+      - name: Setup BDD
+        run: docker compose up -d db
+
       - name: Build JAR
         run: mvn install
         env:
           DB_HOST: localhost
           DB_PORT: 3306
-          DB_NAME: demo
 
       - name: Run Docker containers
         run: docker compose up -d
