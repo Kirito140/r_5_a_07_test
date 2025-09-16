@@ -117,7 +117,7 @@ jobs:
       - name: Tag the existing image
         run: |
           docker load -i app.tar
-          docker tag app mrcotin/test:v2
+          docker tag r_5_a_07_test-app:latest mrcotin/test:v2
 
       # Se connecter a Docker-Hub
       - name: Login to Docker Hub
