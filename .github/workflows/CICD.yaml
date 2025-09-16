@@ -113,13 +113,11 @@ jobs:
           name: image-app
           path: .
 
-      - name: Print images (TEMP)
-        run: docker image ls
-
       # Taguer l'image existante
       - name: Tag the existing image
         run: |
-          docker tag image-app docker.io/mrcotin/test:v2
+          docker load -i image-app.tar
+          docker tag image-app mrcotin/test:v2
 
       # Se connecter a Docker-Hub
       - name: Login to Docker Hub
