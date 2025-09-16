@@ -20,7 +20,7 @@ services:
     container_name: demo-mysql
     environment:
       MYSQL_DATABASE: demo
-      MYSQL_USER: ${DB_USERNAME}&
+      MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     healthcheck:
