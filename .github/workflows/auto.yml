@@ -23,6 +23,10 @@ jobs:
 
       - name: Build JAR
         run: mvn install
+        env:
+          DB_HOST: localhost
+          DB_PORT: 3306
+          DB_NAME: demo
 
       - name: Run Docker containers (tests)
         run: docker compose up -d
