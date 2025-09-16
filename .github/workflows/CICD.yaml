@@ -23,8 +23,15 @@ jobs:
           distribution: "temurin"
           java-version: "21"
 
-      - name: Setup BDD
+      - name: Setup DB
         run: docker compose up -d db
+
+      - name: Wait for DB
+        run: |
+          until docker exec demo-mysql mysqladmin ping -u$DB_USERNAME -p$DB_PASSWORD --silent; do
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
 
       - name: Build JAR
         run: mvn install

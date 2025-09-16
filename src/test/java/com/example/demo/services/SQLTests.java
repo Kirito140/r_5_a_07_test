@@ -17,34 +17,43 @@ class SQLTests {
 	private SQL sql;
 
 	@Test
-	void testGetConnection() throws SQLException {
-		// Vérifie que la connexion s'ouvre correctement
+	void testConnectionAndSelect() throws SQLException {
+		// Vérifie que la connexion s'ouvre
 		assertNotNull(sql.getConnection(), "La connexion ne doit pas être null");
+
+		// Teste une requête SELECT sur la table users déjà créée via init.sql
+		ResultSet rs = sql.select("SELECT * FROM users", null);
+		assertTrue(rs.next(), "Le ResultSet doit contenir au moins une ligne");
+
+		// Vérifie qu'Alice est bien présente
+		boolean foundAlice = false;
+		rs.beforeFirst();
+		while (rs.next()) {
+			if ("Alice".equals(rs.getString("name"))) {
+				foundAlice = true;
+				break;
+			}
+		}
+		assertTrue(foundAlice, "Alice doit être présente dans la table users");
 	}
 
 	@Test
-	void testExecuteUpdateAndSelect() throws SQLException {
-		// Crée une table test
-		sql.executeUpdate("CREATE TABLE IF NOT EXISTS users(id INT PRIMARY KEY, name VARCHAR(50))", null);
+	void testInsertAndUpdate() throws SQLException {
+		// Insert une nouvelle ligne
+		int rowsInserted = sql.executeUpdate(
+				"INSERT INTO users(name, email) VALUES(?, ?)",
+				new Object[] { "Charlie", "charlie@example.com" });
+		assertEquals(1, rowsInserted, "Une ligne doit être insérée");
 
-		// Insère une ligne
-		int rows = sql.executeUpdate("INSERT INTO users(id, name) VALUES(?, ?)", new Object[] { 1, "Alice" });
-		assertEquals(1, rows, "Une seule ligne doit être insérée");
+		// Met à jour cette ligne
+		int rowsUpdated = sql.executeUpdate(
+				"UPDATE users SET name=? WHERE email=?",
+				new Object[] { "Charlie Brown", "charlie@example.com" });
+		assertEquals(1, rowsUpdated, "Une ligne doit être mise à jour");
 
-		// Sélectionne la ligne
-		ResultSet rs = sql.select("SELECT * FROM users WHERE id = ?", new Object[] { 1 });
-		assertTrue(rs.next(), "Le ResultSet doit contenir une ligne");
-		assertEquals("Alice", rs.getString("name"), "Le nom doit correspondre à 'Alice'");
-	}
-
-	@Test
-	void testUpdate() throws SQLException {
-		// Met à jour la ligne existante
-		int rows = sql.executeUpdate("UPDATE users SET name=? WHERE id=?", new Object[] { "Bob", 1 });
-		assertEquals(1, rows, "Une seule ligne doit être affectée");
-
-		ResultSet rs = sql.select("SELECT * FROM users WHERE id=?", new Object[] { 1 });
+		// Vérifie que l'update a été pris en compte
+		ResultSet rs = sql.select("SELECT * FROM users WHERE email=?", new Object[] { "charlie@example.com" });
 		assertTrue(rs.next());
-		assertEquals("Bob", rs.getString("name"), "Le nom doit maintenant être 'Bob'");
+		assertEquals("Charlie Brown", rs.getString("name"));
 	}
 }
