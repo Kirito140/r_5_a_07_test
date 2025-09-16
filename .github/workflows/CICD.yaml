@@ -113,6 +113,9 @@ jobs:
           name: image-app
           path: .
 
+      - name: Print working directory (TEMP)
+        run: ls 
+
       # Taguer l'image existante
       - name: Tag the existing image
         run: |
