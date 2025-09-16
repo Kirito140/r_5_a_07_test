@@ -10,8 +10,8 @@ services:
     ports:
       - "${APP_PORT:-2005}:2005"
     environment:
-      DB_HOST: db
-      DB_PORT: ${DB_PORT}
+      DB_HOST: ${DB_HOST:-db}
+      DB_PORT: ${DB_PORT:-3306}
       DB_NAME: ${DB_NAME}
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -28,6 +28,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u$MYSQL_USER", "-p$MYSQL_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - "${DB_PORT:-3306}:3306"
     volumes:

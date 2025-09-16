@@ -7,7 +7,7 @@ jobs:
   tst-exe:
     runs-on: ubuntu-latest
     env:
-      DB_URL: ${{ vars.DB_URL }}
+      DB_NAME: ${{ vars.DB_NAME }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
@@ -30,7 +30,7 @@ jobs:
       - name: Build JAR
         run: mvn Install
 
-      - name: Run Docker containers
+      - name: Run Docker containers (tests)
         run: docker compose up -d
         
       - name: Show MySQL logs
@@ -38,10 +38,6 @@ jobs:
         run: |
           docker logs demo-mysql;
            exit 1
-           
-    #   - name: Follow Spring Boot logs
-    #     if: always()
-    #     run: docker logs demo-app --follow
 
       - name: Verify application is running
         run: |
@@ -75,43 +71,33 @@ jobs:
         if: always()
         run: docker compose down
 
-  build-demo:
-    runs-on: ubuntu-latest
-    needs: tst-exe
-
-    env:
-      DB_URL: ${{ vars.DB_URL }}
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: "temurin"
-          java-version: "24"
-
-      - name: Build JAR
-        run: mvn clean package
-
-      - uses: mr-smithers-excellent/docker-build-push@v6
-        name: Build & push Docker image
-        with:
-          image: kirito140/test_myapp
-          tags: v1, latest
-          registry: docker.io
-          dockerfile: dockerfile
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
   build-db:
     runs-on: ubuntu-latest
     needs: tst-exe
     env:
-      DB_URL: ${{ vars.DB_URL }}
+      DB_NAME: ${{ vars.DB_NAME }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: mr-smithers-excellent/docker-build-push@v6
+        name: Build & push DB Docker image
+        with:
+          image: mrcotin/test-db
+          tags: v1, latest
+          registry: docker.io
+          dockerfile: dockerfile-mysql.dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+  build-demo:
+    runs-on: ubuntu-latest
+    needs: build-db
+    env:
+      DB_NAME: ${{ vars.DB_NAME }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
@@ -128,15 +114,12 @@ jobs:
       - name: Build JAR
         run: mvn clean package
 
-      - name: Run Docker containers
-        run: docker build -t demo-mysql -f dockerfile-mysql.dockerfile .
-
       - uses: mr-smithers-excellent/docker-build-push@v6
-        name: Build & push Docker image
+        name: Build & push App Docker image
         with:
-          image: kirito140/test_mysql
+          image: mrcotin/test
           tags: v1, latest
           registry: docker.io
-          dockerfile: dockerfile-mysql.dockerfile
+          dockerfile: dockerfile # ou Dockerfile selon ton repo
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
